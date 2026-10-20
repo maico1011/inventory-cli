@@ -33,3 +33,7 @@ bin/
 *.iml
 out/
 *.class
+
+# Gradle
+.gradle/
+build/
