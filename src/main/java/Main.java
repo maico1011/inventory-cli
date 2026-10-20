@@ -1,5 +1,3 @@
-package main.java;
-
 import java.util.Scanner;
 
 //TIP コードを<b>実行</b>するには、<shortcut actionId="Run"/> を押すか
