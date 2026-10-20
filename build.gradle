@@ -25,3 +25,14 @@ application {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(JavaExec).configureEach {
+    standardInput = System.in
+
+    jvmArgs '-Dstdout.encoding=UTF-8',
+            '-Dstderr.encoding=UTF-8'
+}
