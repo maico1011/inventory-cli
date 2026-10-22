@@ -3,10 +3,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CsvInventoryRepository {
 
@@ -63,4 +60,39 @@ public class CsvInventoryRepository {
 
         return products;
     }
+
+    public void save(Path path, Collection<Product> products)
+            throws IOException {
+
+        List<String> lines = new ArrayList<>();
+        lines.add(HEADER);
+
+        for (Product product : products) {
+            String name = product.getName();
+
+            if (name.contains(",")
+                    || name.contains("\"")
+                    || name.contains("\r")
+                    || name.contains("\n")) {
+                throw new IllegalArgumentException(
+                        "CSVに保存できない文字が商品名に含まれています。"
+                );
+            }
+
+            lines.add(
+                    product.getId() + ","
+                            + name + ","
+                            + product.getStockCount()
+            );
+        }
+
+        Path parent = path.toAbsolutePath().getParent();
+
+        if (parent != null) {
+            Files.createDirectories(parent);
+        }
+
+        Files.write(path, lines, StandardCharsets.UTF_8);
+    }
+
 }
