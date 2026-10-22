@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class ProductTest {
     @Test
@@ -76,9 +78,7 @@ public class ProductTest {
 
     @Test
     void 在庫加算でオーバーフローするとエラー() {
-        Product product = new Product(
-                0, "テストノート", Integer.MAX_VALUE
-        );
+        Product product = new Product(0, "テストノート", Integer.MAX_VALUE);
 
         assertThrows(
                 ArithmeticException.class,
@@ -86,6 +86,29 @@ public class ProductTest {
         );
 
         assertEquals(Integer.MAX_VALUE, product.getStockCount());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 0, 11})
+    void 不正な出庫数では在庫が変化しない(int quantity) {
+        Product product = new Product(0, "テストノート", 10);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> product.removeStockCount(quantity)
+        );
+
+        assertEquals(10, product.getStockCount());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 10})
+    void 有効な出庫数では在庫が正しく減少する(int quantity) {
+        Product product = new Product(1, "ノート", 10);
+
+        product.removeStockCount(quantity);
+
+        assertEquals(10 - quantity, product.getStockCount());
     }
 
 
