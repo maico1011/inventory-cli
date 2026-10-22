@@ -1,11 +1,12 @@
+import java.util.List;
 import java.util.Scanner;
+import java.io.IOException;
+import java.nio.file.Path;
 
-//TIP コードを<b>実行</b>するには、<shortcut actionId="Run"/> を押すか
-// ガターの <icon src="AllIcons.Actions.Execute"/> アイコンをクリックします。
 public class Main {
     public static void main(String[] args) {
-        //TIP ハイライトされたテキストにキャレットがある状態で <shortcut actionId="ShowIntentionActions"/> を押すと
-        // IntelliJ IDEA によるその修正案を確認できます。
+    CsvInventoryRepository repository = new CsvInventoryRepository();
+    Path csvPath = Path.of("data", "products.csv");
     Scanner sc = new Scanner(System.in);
     InventoryService service = new InventoryService();
 
@@ -15,6 +16,7 @@ public class Main {
             System.out.println("2.　商品登録");
             System.out.println("3.　入庫");
             System.out.println("4.　出庫");
+            System.out.println("5. CSVファイルから読み込み");
             System.out.println("0.　終了");
 
             int choice = readInt(sc,"操作を選択してください：");
@@ -25,6 +27,11 @@ public class Main {
                     case 2 -> registerProduct(sc, service);
                     case 3 -> changeStock(sc, service, true);
                     case 4 -> changeStock(sc, service, false);
+                    case 5 -> {
+                        List<Product> loadedProducts = repository.load(csvPath);
+                        service.replaceAll(loadedProducts);
+                        System.out.println("CSVの読み込みが完了しました。");
+                    }
                     case 0 -> {
                         System.out.println("終了します。");
                         sc.close();
@@ -36,6 +43,11 @@ public class Main {
                 System.out.println("エラー: " + e.getMessage());
             } catch (ArithmeticException e) {
                 System.out.println("エラー: 在庫数の上限を超えました。");
+            }
+            catch (IOException e) {
+                System.out.println(
+                        "ファイル読み込みエラー: " + e.getMessage()
+                );
             }
         }
     }
