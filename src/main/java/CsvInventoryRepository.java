@@ -17,7 +17,7 @@ public class CsvInventoryRepository {
                 path, StandardCharsets.UTF_8
         );
 
-        if (lines.isEmpty() || !HEADER.equals(lines.get(0))) {
+        if (lines.isEmpty() || !HEADER.equals(lines.getFirst())) {
             throw new IllegalArgumentException(
                     "CSVのヘッダーが不正です。"
             );
