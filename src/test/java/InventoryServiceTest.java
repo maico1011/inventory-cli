@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InventoryServiceTest {
@@ -15,8 +17,8 @@ public class InventoryServiceTest {
     @Test
     void 登録した商品を検索できる() {
 
-        Product retistered = inventoryService.registerProduct("テストノート", 10);
-        Product found = inventoryService.getProduct(retistered.getId());
+        Product registered = inventoryService.registerProduct("テストノート", 10);
+        Product found = inventoryService.getProduct(registered.getId());
 
         assertAll(
                 () -> assertEquals(1, found.getId()),
@@ -73,5 +75,31 @@ public class InventoryServiceTest {
         Product product = inventoryService.registerProduct("テストノート", 10);
 
         assertEquals(1, product.getId());
+    }
+
+    @Test
+    void 不正な商品一覧への置き換えの場合は元データは変更されない() {
+
+        Product registered = inventoryService.registerProduct("テストノート", 10);
+
+        // IDが重複した不正な商品一覧
+        List<Product> invalidProducts = List.of(
+                new Product(2, "不正ペン", 20),
+                new Product(2, "不正消しゴム", 30)
+        );
+
+        // 不正な一覧への置き換えを拒否
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> inventoryService.replaceAll(invalidProducts)
+        );
+
+        // 置き換え前の商品が保持されていることを確認
+        assertAll(
+                () -> assertEquals(1, inventoryService.getAllProducts().size()),
+                () -> assertEquals("テストノート", inventoryService.getProduct(1).getName()),
+                () -> assertEquals(10, inventoryService.getProduct(1).getStockCount())
+        );
+
     }
 }
