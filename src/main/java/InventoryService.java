@@ -5,7 +5,7 @@ import java.util.Map;
 public class InventoryService {
 
     private final Map<Integer, Product > products = new LinkedHashMap<>();
-    private int nextId = 0;
+    private int nextId = 1;
     public Product registerProduct(String productName, int stock) {
         Product product = new Product(nextId, productName, stock);
         products.put(nextId++, product);

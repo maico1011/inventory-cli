@@ -19,7 +19,7 @@ public class InventoryServiceTest {
         Product found = inventoryService.getProduct(retistered.getId());
 
         assertAll(
-                () -> assertEquals(0, found.getId()),
+                () -> assertEquals(1, found.getId()),
                 () -> assertEquals("テストノート", found.getName()),
                 () -> assertEquals(10, found.getStockCount())
         );
@@ -42,9 +42,9 @@ public class InventoryServiceTest {
         Product third = inventoryService.registerProduct("テスト消しゴム", 30);
 
         assertAll(
-                () -> assertEquals(0, first.getId()),
-                () -> assertEquals(1, second.getId()),
-                () -> assertEquals(2, third.getId())
+                () -> assertEquals(1, first.getId()),
+                () -> assertEquals(2, second.getId()),
+                () -> assertEquals(3, third.getId())
         );
     }
 
@@ -72,6 +72,6 @@ public class InventoryServiceTest {
 
         Product product = inventoryService.registerProduct("テストノート", 10);
 
-        assertEquals(0, product.getId());
+        assertEquals(1, product.getId());
     }
 }
