@@ -36,4 +36,32 @@ public class InventoryService {
         product.removeStockCount(quantity);
     }
 
+    // csv読み込み時のデータ置き換え
+    public void replaceAll(Collection<Product> loadedProducts) {
+        Map<Integer, Product> newProducts = new LinkedHashMap<>();
+        int maxId = 0;
+
+        for (Product product : loadedProducts) {
+            int id = product.getId();
+
+            if (id <= 0) {
+                throw new IllegalArgumentException("商品IDは1以上にしてください。");
+            }
+
+            if (newProducts.putIfAbsent(id, product) != null) {
+                throw new IllegalArgumentException("商品IDが重複しています: " + id);
+            }
+
+            maxId = Math.max(maxId, id);
+        }
+
+        if (maxId == Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("商品IDの上限に達しています。");
+        }
+
+        products.clear();
+        products.putAll(newProducts);
+        nextId = maxId + 1;
+    }
+
 }
