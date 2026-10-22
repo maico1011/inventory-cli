@@ -7,10 +7,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class ProductTest {
     @Test
     void 商品を作成できる(){
-        Product product = new Product(0, "テストノート", 10);
+        Product product = new Product(1, "テストノート", 10);
 
         assertAll(
-            () -> assertEquals(0, product.getId()),
+            () -> assertEquals(1, product.getId()),
             () -> assertEquals("テストノート", product.getName()),
             () -> assertEquals(10, product.getStockCount())
         );
@@ -20,7 +20,7 @@ public class ProductTest {
     void 商品名が空の場合エラー(){
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Product(0, "", 10)
+            () -> new Product(1, "", 10)
         );
     }
 
@@ -28,13 +28,13 @@ public class ProductTest {
     void 初期在庫が負の場合はエラー(){
         assertThrows(
             IllegalArgumentException.class,
-            () -> new Product(0, "テストノート", -1)
+            () -> new Product(1, "テストノート", -1)
         );
     }
 
     @Test
     void 入庫すると在庫が増加(){
-        Product product = new Product(0, "テストノート", 10);
+        Product product = new Product(1, "テストノート", 10);
 
         product.addStockCount(5);
 
@@ -43,7 +43,7 @@ public class ProductTest {
 
     @Test
     void 入庫数が０の場合はエラー(){
-        Product product = new Product(0, "テストノート", 10);
+        Product product = new Product(1, "テストノート", 10);
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -56,7 +56,7 @@ public class ProductTest {
 
     @Test
     void 出庫すると在庫が減少(){
-        Product product = new Product(0, "テストノート", 10);
+        Product product = new Product(1, "テストノート", 10);
 
         product.removeStockCount(5);
 
@@ -65,7 +65,7 @@ public class ProductTest {
 
     @Test
     void 在庫数が不足する場合はエラー(){
-        Product product = new Product(0, "テストノート", 10);
+        Product product = new Product(1, "テストノート", 10);
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -78,7 +78,7 @@ public class ProductTest {
 
     @Test
     void 在庫加算でオーバーフローするとエラー() {
-        Product product = new Product(0, "テストノート", Integer.MAX_VALUE);
+        Product product = new Product(1, "テストノート", Integer.MAX_VALUE);
 
         assertThrows(
                 ArithmeticException.class,
@@ -91,7 +91,7 @@ public class ProductTest {
     @ParameterizedTest
     @ValueSource(ints = {-1, 0, 11})
     void 不正な出庫数では在庫が変化しない(int quantity) {
-        Product product = new Product(0, "テストノート", 10);
+        Product product = new Product(1, "テストノート", 10);
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -104,12 +104,11 @@ public class ProductTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 10})
     void 有効な出庫数では在庫が正しく減少する(int quantity) {
-        Product product = new Product(1, "ノート", 10);
+        Product product = new Product(1, "テストノート", 10);
 
         product.removeStockCount(quantity);
 
         assertEquals(10 - quantity, product.getStockCount());
     }
-
 
 }
