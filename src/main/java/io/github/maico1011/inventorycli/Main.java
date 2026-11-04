@@ -1,3 +1,9 @@
+package io.github.maico1011.inventorycli;
+
+import io.github.maico1011.inventorycli.model.Product;
+import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
+import io.github.maico1011.inventorycli.service.InventoryService;
+
 import java.util.List;
 import java.util.Scanner;
 import java.io.IOException;

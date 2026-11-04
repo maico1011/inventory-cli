@@ -1,4 +1,6 @@
 
+import io.github.maico1011.inventorycli.model.Product;
+import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

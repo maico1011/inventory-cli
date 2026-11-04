@@ -1,3 +1,5 @@
+package io.github.maico1011.inventorycli.model;
+
 public class Product {
     private final int id;
     private final String name;

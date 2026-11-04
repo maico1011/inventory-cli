@@ -1,3 +1,6 @@
+package io.github.maico1011.inventorycli.repository.csv;
+
+import io.github.maico1011.inventorycli.model.Product;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

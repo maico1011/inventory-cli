@@ -1,10 +1,14 @@
+package io.github.maico1011.inventorycli.service;
+
+import io.github.maico1011.inventorycli.model.Product;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class InventoryService {
 
-    private final Map<Integer, Product > products = new LinkedHashMap<>();
+    private final Map<Integer, Product> products = new LinkedHashMap<>();
     private int nextId = 1;
     public Product registerProduct(String productName, int stock) {
         Product product = new Product(nextId, productName, stock);

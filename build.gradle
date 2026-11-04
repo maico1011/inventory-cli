@@ -19,7 +19,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'Main'
+    mainClass = 'io/github/maico1011/inventorycli/Main.java'
 }
 
 tasks.named('test') {

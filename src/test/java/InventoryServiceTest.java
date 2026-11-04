@@ -1,3 +1,5 @@
+import io.github.maico1011.inventorycli.model.Product;
+import io.github.maico1011.inventorycli.service.InventoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
