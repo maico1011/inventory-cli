@@ -1,6 +1,6 @@
 
 import io.github.maico1011.inventorycli.model.Product;
-import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
+import io.github.maico1011.inventorycli.repository.csv.CsvInventoryFileStore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CsvInventoryRepositoryTest {
+class CsvInventoryFileStoreTest {
 
     @TempDir
     Path tempDir;
@@ -27,8 +27,8 @@ class CsvInventoryRepositoryTest {
                 StandardCharsets.UTF_8
         );
 
-        CsvInventoryRepository repository =
-                new CsvInventoryRepository();
+        CsvInventoryFileStore repository =
+                new CsvInventoryFileStore();
 
         List<Product> products = repository.load(path);
 
@@ -52,8 +52,8 @@ class CsvInventoryRepositoryTest {
                 StandardCharsets.UTF_8
         );
 
-        CsvInventoryRepository repository =
-                new CsvInventoryRepository();
+        CsvInventoryFileStore repository =
+                new CsvInventoryFileStore();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -71,8 +71,8 @@ class CsvInventoryRepositoryTest {
                 StandardCharsets.UTF_8
         );
 
-        CsvInventoryRepository repository =
-                new CsvInventoryRepository();
+        CsvInventoryFileStore repository =
+                new CsvInventoryFileStore();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -83,8 +83,8 @@ class CsvInventoryRepositoryTest {
 
     @Test
     void 商品情報をCSVに保存できる() throws IOException {
-        CsvInventoryRepository repository =
-                new CsvInventoryRepository();
+        CsvInventoryFileStore repository =
+                new CsvInventoryFileStore();
 
         Path file = tempDir.resolve("products.csv");
 
@@ -111,8 +111,8 @@ class CsvInventoryRepositoryTest {
 
     @Test
     void 保存した商品を読み込んで復元できる() throws IOException {
-        CsvInventoryRepository repository =
-                new CsvInventoryRepository();
+        CsvInventoryFileStore repository =
+                new CsvInventoryFileStore();
 
         Path file = tempDir.resolve("products.csv");
 
@@ -138,8 +138,8 @@ class CsvInventoryRepositoryTest {
 
     @Test
     void カンマを含む商品名は保存できない() {
-        CsvInventoryRepository repository =
-                new CsvInventoryRepository();
+        CsvInventoryFileStore repository =
+                new CsvInventoryFileStore();
 
         Path file = tempDir.resolve("products.csv");
 

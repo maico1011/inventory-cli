@@ -1,101 +1,25 @@
 package io.github.maico1011.inventorycli.repository.csv;
 
 import io.github.maico1011.inventorycli.model.Product;
+import io.github.maico1011.inventorycli.repository.InventoryRepository;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Map;
 
-public class CsvInventoryRepository {
+public class CsvInventoryRepository implements InventoryRepository {
+    // CSVから読み込んだ商品を保持する
+    private final Map<Integer, Product> products;
 
-    private static final String HEADER = "id,name,stockCount";
+    // CSVの保存先
+    private final Path filePath;
 
-    public List<Product> load(Path path) throws IOException {
-        List<String> lines = Files.readAllLines(
-                path, StandardCharsets.UTF_8
-        );
+    // コンストラクタ
 
-        if (lines.isEmpty() || !HEADER.equals(lines.getFirst())) {
-            throw new IllegalArgumentException(
-                    "CSVのヘッダーが不正です。"
-            );
-        }
+    // findAll()
 
-        List<Product> products = new ArrayList<>();
-        Set<Integer> usedIds = new HashSet<>();
+    // findById()
 
-        for (int i = 1; i < lines.size(); i++) {
-            String[] columns = lines.get(i).split(",", -1);
+    // save()
 
-            if (columns.length != 3) {
-                throw new IllegalArgumentException(
-                        "列の数が不正です。"
-                );
-            }
-
-            try {
-                int id = Integer.parseInt(columns[0]);
-                String name = columns[1];
-                int stockCount = Integer.parseInt(columns[2]);
-
-                if (id <= 0 || !usedIds.add(id)) {
-                    throw new IllegalArgumentException(
-                            "商品IDが不正、または重複しています。"
-                    );
-                }
-
-                if (name.contains("\"")) {
-                    throw new IllegalArgumentException(
-                            "商品名に使用できない文字が含まれています。"
-                    );
-                }
-
-                products.add(new Product(id, name, stockCount));
-
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(
-                        (i + 1) + "行目: " + e.getMessage(), e
-                );
-            }
-        }
-
-        return products;
-    }
-
-    public void save(Path path, Collection<Product> products)
-            throws IOException {
-
-        List<String> lines = new ArrayList<>();
-        lines.add(HEADER);
-
-        for (Product product : products) {
-            String name = product.getName();
-
-            if (name.contains(",")
-                    || name.contains("\"")
-                    || name.contains("\r")
-                    || name.contains("\n")) {
-                throw new IllegalArgumentException(
-                        "CSVに保存できない文字が商品名に含まれています。"
-                );
-            }
-
-            lines.add(
-                    product.getId() + ","
-                            + name + ","
-                            + product.getStockCount()
-            );
-        }
-
-        Path parent = path.toAbsolutePath().getParent();
-
-        if (parent != null) {
-            Files.createDirectories(parent);
-        }
-
-        Files.write(path, lines, StandardCharsets.UTF_8);
-    }
-
+    // deleteById()
 }

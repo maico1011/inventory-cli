@@ -1,7 +1,7 @@
 package io.github.maico1011.inventorycli;
 
 import io.github.maico1011.inventorycli.model.Product;
-import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
+import io.github.maico1011.inventorycli.repository.csv.CsvInventoryFileStore;
 import io.github.maico1011.inventorycli.service.InventoryService;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
-    CsvInventoryRepository repository = new CsvInventoryRepository();
+    CsvInventoryFileStore repository = new CsvInventoryFileStore();
     Path csvPath = Path.of("data", "products.csv");
     Scanner sc = new Scanner(System.in);
     InventoryService service = new InventoryService();

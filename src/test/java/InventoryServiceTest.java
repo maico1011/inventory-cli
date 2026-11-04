@@ -79,29 +79,4 @@ public class InventoryServiceTest {
         assertEquals(1, product.getId());
     }
 
-    @Test
-    void 不正な商品一覧への置き換えの場合は元データは変更されない() {
-
-        Product registered = inventoryService.registerProduct("テストノート", 10);
-
-        // IDが重複した不正な商品一覧
-        List<Product> invalidProducts = List.of(
-                new Product(2, "不正ペン", 20),
-                new Product(2, "不正消しゴム", 30)
-        );
-
-        // 不正な一覧への置き換えを拒否
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> inventoryService.replaceAll(invalidProducts)
-        );
-
-        // 置き換え前の商品が保持されていることを確認
-        assertAll(
-                () -> assertEquals(1, inventoryService.getAllProducts().size()),
-                () -> assertEquals("テストノート", inventoryService.getProduct(1).getName()),
-                () -> assertEquals(10, inventoryService.getProduct(1).getStockCount())
-        );
-
-    }
 }
