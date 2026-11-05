@@ -14,7 +14,6 @@ public class CsvInventoryRepository implements InventoryRepository {
     // CSVの保存先
     private final Path filePath;
 
-    // コンストラクタ
     public CsvInventoryRepository(Path filePath) {
         this.filePath = filePath;
         this.products = new LinkedHashMap<>();
