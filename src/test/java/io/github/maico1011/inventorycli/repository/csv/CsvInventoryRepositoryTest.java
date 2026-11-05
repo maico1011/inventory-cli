@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -105,5 +107,113 @@ public class CsvInventoryRepositoryTest {
                 .map(Product::getId)
                 .collect(Collectors.toSet());
         assertEquals(Set.of(1, 2), actualIds);
+    }
+
+    @Test
+    void 保存した商品を新しいRepositoryから取得できる() {
+        Path path = tempDir.resolve("products.csv");
+
+        CsvInventoryRepository first =
+                new CsvInventoryRepository(path);
+
+        first.save(new Product(1, "テスト商品", 10));
+
+        CsvInventoryRepository second =
+                new CsvInventoryRepository(path);
+
+        Product actual = second.findById(1).orElseThrow();
+
+        assertAll(
+                () -> assertEquals(1, actual.getId()),
+                () -> assertEquals("テスト商品", actual.getName()),
+                () -> assertEquals(10, actual.getStockCount())
+        );
+    }
+
+    @Test
+    void 同じIDの商品を更新すると更新後の内容が復元できる() {
+        Path path = tempDir.resolve("products.csv");
+
+        CsvInventoryRepository first =
+                new CsvInventoryRepository(path);
+
+        first.save(new Product(1, "テスト商品1", 10));
+        first.save(new Product(1, "テスト商品2", 20));
+
+        CsvInventoryRepository second =
+                new CsvInventoryRepository(path);
+
+        Product actual = second.findById(1).orElseThrow();
+
+        assertEquals("テスト商品2", actual.getName());
+        assertEquals(20, actual.getStockCount());
+    }
+
+    @Test
+    void 削除済みの商品は新しいリポジトリにも残らない() {
+        Path path = tempDir.resolve("products.csv");
+
+        CsvInventoryRepository first =
+                new CsvInventoryRepository(path);
+
+        first.save(new Product(1, "テスト商品1", 10));
+        first.save(new Product(2, "テスト商品2", 20));
+
+        assertTrue(first.deleteById(1));
+
+        CsvInventoryRepository second =
+                new CsvInventoryRepository(path);
+
+        assertAll(
+                // 削除した商品が存在しない
+                () -> assertTrue(second.findById(1).isEmpty()),
+
+                // 削除していない商品は残っている
+                () -> assertTrue(second.findById(2).isPresent()),
+
+                // 商品数が1件になっている
+                () -> assertEquals(1, second.findAll().size())
+        );
+    }
+    @Test
+    void 存在しないIDを削除してもfalseになる() {
+        repository.save(new Product(1, "テスト商品", 10));
+
+        assertFalse(repository.deleteById(2));
+
+        assertAll(
+                () -> assertEquals(1, repository.findAll().size()),
+                () -> assertTrue(repository.findById(1).isPresent())
+        );
+    }
+
+    @Test
+    void 不正文字列によるCSV保存失敗時にMapが変更されない() {
+        repository.save(new Product(1, "正常な商品", 10));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            repository.save(new Product(2, "不正,な商品", 20));
+        });
+
+        assertAll(
+                () -> assertEquals(1, repository.findAll().size()),
+                () -> assertTrue(repository.findById(1).isPresent()),
+                () -> assertTrue(repository.findById(2).isEmpty())
+        );
+    }
+    @Test
+    void 不正なディレクトリによるCSV書き込み失敗時にMapが変更されない() throws IOException {
+        Path path = tempDir.resolve("products.csv");
+
+        CsvInventoryRepository repository =
+                new CsvInventoryRepository(path);
+
+        Files.createDirectory(path);
+
+        assertThrows(IllegalStateException.class, () -> {
+            repository.save(new Product(1, "テスト商品", 10));
+        });
+
+        assertTrue(repository.findAll().isEmpty());
     }
 }
