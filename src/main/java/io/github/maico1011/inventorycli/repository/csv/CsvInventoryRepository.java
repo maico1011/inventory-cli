@@ -8,7 +8,6 @@ import java.util.*;
 
 public class CsvInventoryRepository implements InventoryRepository {
 
-
     // CSVから読み込んだ商品を保持する
     private final Map<Integer, Product> products;
 
@@ -33,12 +32,21 @@ public class CsvInventoryRepository implements InventoryRepository {
 
     @Override
     public void save(Product product) {
-        // ① productがnullでないか確認
 
-        // ② 商品IDが1以上であることを確認
+        Objects.requireNonNull(product, "商品がnullです");
 
-        // ③ productsに商品を追加・更新
+        if (product.getId() <= 0) {
+            throw new IllegalArgumentException(
+                    "商品IDは1以上である必要があります"
+            );
+        }
+
+        products.put(product.getId(), product);
     }
 
-    // deleteById()
+    @Override
+    public boolean deleteById(int id) {
+        return products.remove(id) != null;
+    }
+
 }
