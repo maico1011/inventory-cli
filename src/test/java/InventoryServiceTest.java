@@ -1,8 +1,11 @@
 import io.github.maico1011.inventorycli.model.Product;
+import io.github.maico1011.inventorycli.repository.InventoryRepository;
+import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
 import io.github.maico1011.inventorycli.service.InventoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +16,12 @@ public class InventoryServiceTest {
 
     @BeforeEach
     void setUp() {
-        inventoryService = new InventoryService();
+        InventoryRepository repository =
+                new CsvInventoryRepository(
+                        Path.of("data", "test-products.csv")
+                );
+
+        inventoryService = new InventoryService(repository);
     }
 
     @Test

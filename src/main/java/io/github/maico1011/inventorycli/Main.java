@@ -1,7 +1,9 @@
 package io.github.maico1011.inventorycli;
 
 import io.github.maico1011.inventorycli.model.Product;
+import io.github.maico1011.inventorycli.repository.InventoryRepository;
 import io.github.maico1011.inventorycli.repository.csv.CsvInventoryFileStore;
+import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
 import io.github.maico1011.inventorycli.service.InventoryService;
 
 import java.util.List;
@@ -11,10 +13,10 @@ import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
-    CsvInventoryFileStore repository = new CsvInventoryFileStore();
-    Path csvPath = Path.of("data", "products.csv");
-    Scanner sc = new Scanner(System.in);
-    InventoryService service = new InventoryService();
+        Path path = Path.of("data", "products.csv");
+        InventoryRepository repository = new CsvInventoryRepository(path);
+        InventoryService service = new InventoryService(repository);
+        Scanner sc = new Scanner(System.in);
 
         while(true){
             System.out.println("\n 在庫管理システム");
@@ -34,15 +36,15 @@ public class Main {
                     case 2 -> registerProduct(sc, service);
                     case 3 -> changeStock(sc, service, true);
                     case 4 -> changeStock(sc, service, false);
-                    case 5 -> {
-                        List<Product> loadedProducts = repository.load(csvPath);
-                        service.replaceAll(loadedProducts);
-                        System.out.println("CSVの読み込みが完了しました。");
-                    }
-                    case 6 -> {
-                        repository.save(csvPath, service.getAllProducts());
-                        System.out.println("CSVへの保存が完了しました。");
-                    }
+//                    case 5 -> {
+//                        List<Product> loadedProducts = repository.load(csvPath);
+//                        service.replaceAll(loadedProducts);
+//                        System.out.println("CSVの読み込みが完了しました。");
+//                    }
+//                    case 6 -> {
+//                        repository.save(csvPath, service.getAllProducts());
+//                        System.out.println("CSVへの保存が完了しました。");
+//                    }
                     case 0 -> {
                         System.out.println("終了します。");
                         sc.close();
@@ -55,11 +57,11 @@ public class Main {
             } catch (ArithmeticException e) {
                 System.out.println("エラー: 在庫数の上限を超えました。");
             }
-            catch (IOException e) {
-                System.out.println(
-                        "ファイル読み込みエラー: " + e.getMessage()
-                );
-            }
+//            catch (IOException e) {
+//                System.out.println(
+//                        "ファイル読み込みエラー: " + e.getMessage()
+//                );
+//            }
         }
     }
 
