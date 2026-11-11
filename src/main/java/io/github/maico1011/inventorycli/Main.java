@@ -24,8 +24,6 @@ public class Main {
             System.out.println("2.　商品登録");
             System.out.println("3.　入庫");
             System.out.println("4.　出庫");
-            System.out.println("5. CSVファイルから読み込み");
-            System.out.println("6. CSVに保存");
             System.out.println("0.　終了");
 
             int choice = readInt(sc,"操作を選択してください：");
@@ -36,15 +34,6 @@ public class Main {
                     case 2 -> registerProduct(sc, service);
                     case 3 -> changeStock(sc, service, true);
                     case 4 -> changeStock(sc, service, false);
-//                    case 5 -> {
-//                        List<Product> loadedProducts = repository.load(csvPath);
-//                        service.replaceAll(loadedProducts);
-//                        System.out.println("CSVの読み込みが完了しました。");
-//                    }
-//                    case 6 -> {
-//                        repository.save(csvPath, service.getAllProducts());
-//                        System.out.println("CSVへの保存が完了しました。");
-//                    }
                     case 0 -> {
                         System.out.println("終了します。");
                         sc.close();
@@ -57,11 +46,6 @@ public class Main {
             } catch (ArithmeticException e) {
                 System.out.println("エラー: 在庫数の上限を超えました。");
             }
-//            catch (IOException e) {
-//                System.out.println(
-//                        "ファイル読み込みエラー: " + e.getMessage()
-//                );
-//            }
         }
     }
 
