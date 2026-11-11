@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 public class CsvInventoryFileStore {
@@ -94,8 +95,26 @@ public class CsvInventoryFileStore {
         if (parent != null) {
             Files.createDirectories(parent);
         }
+        
+        Path tempFile = Files.createTempFile(
+                parent,
+                "inventory-",
+                ".tmp"
+        );
 
-        Files.write(path, lines, StandardCharsets.UTF_8);
+        try {
+            // CSVを書き込む
+            Files.write(tempFile, lines, StandardCharsets.UTF_8);
+            // 保存先へ移動する
+            Files.move(
+                    tempFile,
+                    path,
+                    StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
     }
 
 }
