@@ -90,11 +90,12 @@ public class CsvInventoryFileStore {
             );
         }
 
-        Path parent = path.toAbsolutePath().getParent();
+        Path parent = Objects.requireNonNull(
+                path.toAbsolutePath().getParent(),
+                "保存先の親ディレクトリを取得できません"
+        );
 
-        if (parent != null) {
-            Files.createDirectories(parent);
-        }
+        Files.createDirectories(parent);
         
         Path tempFile = Files.createTempFile(
                 parent,
