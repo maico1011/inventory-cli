@@ -230,4 +230,43 @@ public class CsvInventoryRepositoryTest {
             assertEquals(0, tempFileCount);
         }
     }
+
+    @Test
+    void findByIdで取得した商品を変更してもRepository内部の商品は変わらない() {
+        repository.save(new Product(1, "テスト商品", 10));
+
+        Product product = repository.findById(1).orElseThrow();
+
+        product.addStockCount(5);
+
+        Product actual = repository.findById(1).orElseThrow();
+
+        assertEquals(10, actual.getStockCount());
+    }
+
+    @Test
+    void findAllで取得した商品を変更してもRepository内部の商品は変わらない() {
+        repository.save(new Product(1, "テスト商品", 10));
+
+        List<Product> products = repository.findAll();
+        Product product = products.getFirst();
+        product.addStockCount(5);
+
+        Product actual = repository.findById(1).orElseThrow();
+
+        assertEquals(10, actual.getStockCount());
+    }
+
+    @Test
+    void 保存後に元のProductを変更しても影響しない() {
+        Product original = new Product(1, "テスト商品", 10);
+
+        repository.save(original);
+
+        original.addStockCount(5);
+
+        Product actual = repository.findById(1).orElseThrow();
+
+        assertEquals(10, actual.getStockCount());
+    }
 }
