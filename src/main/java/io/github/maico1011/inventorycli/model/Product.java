@@ -16,6 +16,11 @@ public class Product {
         this.stockCount = stockCount;
     }
 
+    // Deep Copy
+    public Product copy() {
+        return new Product(id, name, stockCount);
+    }
+
     public int getId() {
         return id;
     }

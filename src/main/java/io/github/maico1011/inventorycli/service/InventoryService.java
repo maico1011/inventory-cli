@@ -53,15 +53,15 @@ public class InventoryService {
     }
 
     public void addStock(int id, int quantity) {
-        Product product = getProduct(id);
-        product.addStockCount(quantity);
-        repository.save(product);
+        Product updated = getProduct(id).copy();
+        updated.addStockCount(quantity);
+        repository.save(updated);
     }
 
     public void removeStock(int id, int quantity) {
-        Product product = getProduct(id);
-        product.removeStockCount(quantity);
-        repository.save(product);
+        Product updated = getProduct(id).copy();
+        updated.removeStockCount(quantity);
+        repository.save(updated);
     }
 
 }

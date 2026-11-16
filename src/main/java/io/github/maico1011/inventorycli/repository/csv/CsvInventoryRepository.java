@@ -41,12 +41,14 @@ public class CsvInventoryRepository implements InventoryRepository {
 
     @Override
     public List<Product> findAll() {
-        return new ArrayList<>(products.values());
+        return products.values().stream()
+                .map(Product::copy)
+                .toList();
     }
-
     @Override
     public Optional<Product> findById(int id) {
-        return Optional.ofNullable(products.get(id));
+        return Optional.ofNullable(products.get(id))
+                .map(Product::copy);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class CsvInventoryRepository implements InventoryRepository {
         Map<Integer, Product> updatedProducts =
                 new LinkedHashMap<>(products);
 
-        updatedProducts.put(product.getId(), product);
+        updatedProducts.put(product.getId(), product.copy());
         persistAndApply(updatedProducts);
     }
 
