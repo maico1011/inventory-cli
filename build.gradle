@@ -26,6 +26,10 @@ application {
     mainClass = 'io.github.maico1011.inventorycli.Main'
 }
 
+tasks.named('bootRun') {
+    mainClass = 'io.github.maico1011.inventorycli.InventoryCliApplication'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
