@@ -104,9 +104,7 @@ public class CsvInventoryFileStore {
         );
 
         try {
-            // CSVを書き込む
             Files.write(tempFile, lines, StandardCharsets.UTF_8);
-            // 保存先へ移動する
             Files.move(
                     tempFile,
                     path,
