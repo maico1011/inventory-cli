@@ -6,7 +6,9 @@ import io.github.maico1011.inventorycli.repository.InventoryRepository;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.springframework.stereotype.Service;
 
+@Service
 public class InventoryService {
 
     private final InventoryRepository repository;
