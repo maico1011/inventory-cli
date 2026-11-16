@@ -216,4 +216,18 @@ public class CsvInventoryRepositoryTest {
 
         assertTrue(repository.findAll().isEmpty());
     }
+
+    @Test
+    void CSV保存後に一時ファイルが残らない() throws IOException {
+        repository.save(new Product(1, "テスト商品", 10));
+
+        try (var files = Files.list(tempDir)) {
+            long tempFileCount = files
+                    .filter(path ->
+                            path.getFileName().toString().endsWith(".tmp"))
+                    .count();
+
+            assertEquals(0, tempFileCount);
+        }
+    }
 }
