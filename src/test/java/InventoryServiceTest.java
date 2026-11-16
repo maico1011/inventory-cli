@@ -4,6 +4,7 @@ import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
 import io.github.maico1011.inventorycli.service.InventoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -14,11 +15,14 @@ public class InventoryServiceTest {
 
     private InventoryService inventoryService;
 
+    @TempDir
+    Path tempDir;
+
     @BeforeEach
     void setUp() {
         InventoryRepository repository =
                 new CsvInventoryRepository(
-                        Path.of("data", "test-products.csv")
+                        tempDir.resolve("products.csv")
                 );
 
         inventoryService = new InventoryService(repository);
@@ -68,9 +72,12 @@ public class InventoryServiceTest {
 
         inventoryService.removeStock(notebook.getId(), 5);
 
+        Product actualNotebook = inventoryService.getProduct(notebook.getId());
+        Product actualPen = inventoryService.getProduct(pen.getId());
+
         assertAll(
-                () -> assertEquals(5, notebook.getStockCount()),
-                () -> assertEquals(20, pen.getStockCount())
+                () -> assertEquals(5, actualNotebook.getStockCount()),
+                () -> assertEquals(20, actualPen.getStockCount())
         );
     }
 
