@@ -18,7 +18,8 @@ java {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.12.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

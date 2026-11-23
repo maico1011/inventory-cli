@@ -1,3 +1,4 @@
+import io.github.maico1011.inventorycli.exception.ProductNotFoundException;
 import io.github.maico1011.inventorycli.model.Product;
 import io.github.maico1011.inventorycli.repository.InventoryRepository;
 import io.github.maico1011.inventorycli.repository.csv.CsvInventoryRepository;
@@ -47,6 +48,29 @@ public class InventoryServiceTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> inventoryService.getProduct(999)
+        );
+    }
+
+    @Test
+    void 存在しない商品IDで検索するとProductNotFoundExceptionが発生する() {
+
+        ProductNotFoundException e = assertThrows(
+                ProductNotFoundException.class,
+                () -> inventoryService.getProduct(999)
+        );
+
+        assertAll(
+                () -> assertEquals("商品ID 999 は存在しません", e.getMessage()),
+                () -> assertEquals(999, e.getProductId())
+        );
+    }
+
+    @Test
+    void 存在しない商品IDへの入庫はProductNotFoundExceptionが発生する() {
+
+        assertThrows(
+                ProductNotFoundException.class,
+                () -> inventoryService.addStock(999, 1)
         );
     }
 

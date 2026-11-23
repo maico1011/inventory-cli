@@ -1,5 +1,6 @@
 package io.github.maico1011.inventorycli.service;
 
+import io.github.maico1011.inventorycli.exception.ProductNotFoundException;
 import io.github.maico1011.inventorycli.model.Product;
 import io.github.maico1011.inventorycli.repository.InventoryRepository;
 
@@ -46,10 +47,7 @@ public class InventoryService {
 
     public Product getProduct(int id) {
         return repository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "商品ID：" + id + " は存在しません"
-                        ));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public void addStock(int id, int quantity) {
